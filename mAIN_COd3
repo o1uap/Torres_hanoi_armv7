@@ -1,0 +1,17 @@
+.global _Principal
+
+_Principal://aQUI dEFINIiMOS eL nUMERO dE dISCOS y DE tORRES
+
+MOV R0, #7	//NuMeRo dE dISKOS
+MOV R1, #1 	//tORRE origen
+MOV R2, #2 // tOrRE AUXILIAR
+MOV R3, #3 //tORRe DESSTINo
+LDR R1, =0x1234567
+
+
+_HANOI: // fUNCION qUE REsUElVe el prOBLeMa O mU EvE lAS tORRES nO sE aUN
+
+
+
+
+
