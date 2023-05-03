@@ -1,2 +1,3 @@
 # hANOI_tOWERSv1
-coDE iN  aSSEMBLY fOR arm ThAt sOLVE hANOi tOWERS fOR 7 DIsKS
+
+Codigo en ASSEMBLY para ARM que resuelve las torres de hanoi con 7 discos
