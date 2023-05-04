@@ -7,21 +7,68 @@ _start:
 		mov r3, #3			// Torre 3
 
 		bl funcion_hanoi
-		
+
 		1:b 1b               //Finalizacion del codigo
 
 funcion_hanoi:
 	PUSH {r4-r12, lr}
-	 
+
 		mov r4, r0 		        //numero de discos
 		mov r5, r1 		       //torre inicial
 		mov r6, r2			  //torre de destino
 		mov r7, r3	         //torre de auxiliar
 		ldr r12, =0x01000	// Direccion donde se guardan los estados de las torres}
+
+
+	cmp r4, #1 // compara el numero de discos con el caso de un disco
+	beq end
+		
+		sub	sp, sp, #12
+		str r2, [sp, #4]
+		str r3, [sp, #8]
+		 
+		mov r4, #6
+		mov R5, #2
+		
+		bl funcion_hanoi
+		
+		ldr r2, [sp, #4]
+		ldr r3, [sp, #8]
+		
+		bl move_disk
+		
+		mov r2, r5
+		
+move_disk:
+        
+		push {lr}
+		ldr r1, [sp]
+		ldr R2, [sp, #4]
+		ldr r3, [sp, #8]
+		
+		ldr r4, [r1, r2, lsl #2]
+		ldr r5, [r1, r3, lsl #2]
+		
+		cmp r4, r5
+		beq cant_move
+		
+		str r4, [r1, r3, lsl #2]
+		str r5, [r1, r2, lsl #2]
+		add r6, r6, #1
+		
+		bl end
+		
+cant_move:
+
+        pop {pc}
 		
 		
-cmp r4, #1 // compara el numero de discos con el caso de un disco
-bne else   // si no son iguales se envia al else(sino)
+end:
+
+        add sp, sp, #12
+		pop {pc}
+
+
 
 
 else:
