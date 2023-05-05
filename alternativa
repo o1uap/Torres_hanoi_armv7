@@ -1,11 +1,8 @@
 .global _start
 _start:
-
-		mov r0, #7
-		mov r1, #1			// Torre 1
-		mov r2, #2			// Torre 2
-		mov r3, #3			// Torre 3
-
+	
+	mov r0, #7
+	
 		bl funcion_hanoi
 
 		1:b 1b               //Finalizacion del codigo
@@ -13,22 +10,31 @@ _start:
 funcion_hanoi:
 	PUSH {r4-r12, lr}
 
-		mov r4, r0 		        //numero de discos
-		mov r5, r1 		       //torre inicial
-		mov r6, r2			  //torre de destino
-		mov r7, r3	         //torre de auxiliar
-		ldr r12, =0x01000	// Direccion donde se guardan los estados de las torres}
-
-
-	cmp r4, #1 // compara el numero de discos con el caso de un disco
-	beq end
+		mov r4, #0 		        //numero de discos
+		mov r5, #1 		       //torre inicial
+		mov r6, #2			  //torre de destino
+		mov r7, #3	         //torre de auxiliar
+		ldr r12, =0x01000	
+       bl torreinicial 
+torreinicial:
+		push {r0,r7,lr}
+		ldr r1, =0x12345678
+		mov r7, #4
+		mvn r0, r0
+		add r0, r0, #9
+		mul r0, r0, r7
+		lsr r1, r1, r0
+		pop {r0, r7}
 		
+		bl save
+		pop {lr}
+	cmp r4, #1 // compara el numero de discos con el caso de un disco
+
 		sub	sp, sp, #12
 		str r2, [sp, #4]
 		str r3, [sp, #8]
 		 
 		mov r4, #6
-		mov R5, #2
 		
 		bl funcion_hanoi
 		
@@ -42,33 +48,38 @@ funcion_hanoi:
 move_disk:
         
 		push {lr}
-		ldr r1, [sp]
-		ldr R2, [sp, #4]
-		ldr r3, [sp, #8]
+		ldr r1, [sp, #4]
+		ldr R2, [sp, #8]
+		ldr r3, [sp, #12]
 		
 		ldr r4, [r1, r2, lsl #2]
 		ldr r5, [r1, r3, lsl #2]
 		
-		cmp r4, r5
+		cmp r4, #0
 		beq cant_move
+		
+		cmp r5, #0
+		beq move
+		
+		cmp r4, r5
+		bge cant_move
+		
+move:
+        
 		
 		str r4, [r1, r3, lsl #2]
 		str r5, [r1, r2, lsl #2]
-		add r6, r6, #1
 		
-		bl end
+		bx lr
 		
 cant_move:
-
+        
+		mov r0, #0
         pop {pc}
 		
 		
-end:
-
-        add sp, sp, #12
-		pop {pc}
-
-
-
-
-else:
+		save:
+			str r1, [r12], #4
+			str r2, [r12], #4
+			str r3, [r12], #8
+			mov pc, lr
