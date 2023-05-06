@@ -1,6 +1,7 @@
 .global _start
 _start:
-		mov r0, #7
+	
+	mov r0, #7
 	
 		bl funcion_hanoi
 
@@ -9,25 +10,25 @@ _start:
 funcion_hanoi:
 	PUSH {r4-r12, lr}
 	
- cmp r0, #1               @ Caso base: solo hay un disco
-    beq done                 @ Si solo hay un disco, terminar
-
+	 bl torreinicial //
+ 
     mov r12, r1              @ Mover el nombre del poste auxiliar a r12
     mov r11, r2              @ Mover el nombre del poste final a r11
     mov r10, r3              @ Mover el nombre del poste inicial a r10
     mov r1, r10              @ Mover el nombre del poste inicial a r1
     mov r2, r11              @ Mover el nombre del poste final a r2
     mov r3, r12              @ Mover el nombre del poste auxiliar a r3
-
     mov r4, r0               @ Mover el número de discos a r4
- 
-		ldr r12, =0x01000	
-		
-       bl torreinicial 
+	
+ ldr r12, =0x03000	
+ 	 
+	 POP {r4-r12, lr}
+	 mov pc, lr
+	   
 torreinicial:
 		push {r0,r7,lr}
 		ldr r1, =0x12345678
-		mov r7, #4
+		mov r7, #4//
 		mvn r0, r0
 		add r0, r0, #9
 		mul r0, r0, r7
@@ -35,13 +36,11 @@ torreinicial:
 		pop {r0, r7}
 		bl guardar_estado
 		pop {lr}
+
 	
-	
- if:
-    cmp r0, #1
-	// esto me quedo igual que el original pero invertido( lo hice casi a mano)
-	beq else
-	
+ if://
+    beq else
+    cmp r0, #1 // esto me quedo igual que el original pero invertido( lo hice casi a mano) //
 	push {r0, r9-r11, lr}
 		sub r0, r0, #1
 		add r11, r11, r10
@@ -64,7 +63,7 @@ torreinicial:
 		pop {r0, r9-r11, lr}
 		mov pc, lr
 
- else:
+ else://
 		push {lr}
 		cmp r9, #2	
 		pop {lr}
@@ -77,7 +76,8 @@ torreinicial:
 		moveq r4, r2
 		movlt r4, r1
 		ldr r5, =0xffffffff
-		mov r10, #0
+		mov r10, r9//
+		beq exit_loop
 		push {r4}
 loop:
 	ands r4, r5
@@ -87,7 +87,7 @@ loop:
 
 exit_loop:
 	pop {r4}
-	cmp r7, #1
+	cmp r10, #1//
 	beq insertDisk
 
 	// Se borra el primer disco de derecha a izquierda
@@ -117,14 +117,9 @@ insertDisk:
 			movlt r1, r4
 			pop {r4, r5, r10}
 			mov r7, #0	
-done:
-    ldmfd sp!, {lr, r4-r12}   // Restaurar los registros guardados
-    bx lr                    // Retornar
-
 			
 guardar_estado:
 			str r1, [r12], #4
 			str r2, [r12], #4
 			str r3, [r12], #8
-		bl torreinicial
 		    mov pc, lr
