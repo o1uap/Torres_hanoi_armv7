@@ -1,13 +1,12 @@
 .global _start
 _start:
-	
-	     
-	    mov r0, #7
+		
+		mov r0, #7
 		bl hanoi
 		1:b 1b               
 
 hanoi:
-    push {r1-r12, lr}
+    push {r1-r3, r7, r9-r12, lr}
 	mov r1, #0
 	mov r2, #0
 	mov r3, #0			
@@ -19,13 +18,13 @@ hanoi:
  	 
 	 bl torreinicial
 	 
-	 POP {r4-r12, lr}
+	 POP {r1-r3, r7, r9-r12, lr}
 	 mov pc, lr
 	   
 torreinicial:
 		push {r0,r7,lr}
 		ldr r1, =0x12345678
-		mov r7, #4//
+		mov r7, #4
 		mvn r0, r0
 		add r0, r0, #9
 		mul r0, r0, r7
@@ -34,9 +33,9 @@ torreinicial:
 		bl guardar_estado
 		pop {lr}
 if:
-	   cmp r0, #1
+		cmp r0, #1
 		beq then
-		
+	
 		push {r0, r9-r11, lr}
 		sub r0, r0, #1
 		add r11, r11, r10
@@ -46,8 +45,8 @@ if:
 		pop {r0, r9-r11, lr}
 		
 		push {lr}
-		cmp r9, #2
-		bl sort
+		cmp r9, #2	
+		bl ordenar
 		pop {lr}
 		
 		push {r0, r9-r11, lr}
@@ -61,13 +60,13 @@ if:
 		
 then:
 	
-	push {lr}
+	    push {lr}
 		cmp r9, #2	
-		bl sort
+		bl ordenar
 		pop {lr}
 		mov pc, lr
-        
- sort:
+		
+ordenar:
  
         push {r4, r5, r10}
 		movgt r4, r3
@@ -75,48 +74,46 @@ then:
 		movlt r4, r1
 		ldr r5, =0xffffffff
 		mov r10, #0
-		beq exit_loop
 		push {r4}
 loop:
-	ands r4, r5
-	lslne r5, #4
-	addne r10, #1
-	bne loop
+	    ands r4, r5
+    	lslne r5, #4
+	    addne r10, #1
+	    bne loop
 
 exit_loop:
-	pop {r4}
-	cmp r7, #1
-	beq colocar_disco
+        pop {r4}
+	    cmp r7, #1
+	    beq colocar_disco
 	
-	sub r10, #1
-	lsl r10, #2
-	mov r5, #0xf
-	lsl r5, r10
-	mvn r5, r5
-	and r4, r5
-	cmp r9,#2
-	movgt r3, r4
-	moveq r2, r4
-	movlt r1, r4
-	pop {r4, r5, r10}
-	mov r7, #1
-	cmp r11, #2
-	bl sort
+	    sub r10, #1
+	    lsl r10, #2
+	    mov r5, #0xf
+	    lsl r5, r10
+	    mvn r5, r5
+	    and r4, r5
+	    cmp r9,#2
+	    movgt r3, r4
+	    moveq r2, r4
+	    movlt r1, r4
+	    pop {r4, r5, r10}
+	    mov r7, #1
+	    cmp r11, #2
+	    b ordenar
 	
 colocar_disco:
-
-			lsl r10, #2 
-			lsl r5, r0, r10
-			orr r4, r5
-			cmp r11, #2 
-			movgt r3, r4
-			moveq r2, r4
-			movlt r1, r4
-			pop {r4, r5, r10}
-			mov r7, #0	
+        lsl r10, #2 
+        lsl r5, r0, r10
+	    orr r4, r5
+		cmp r11, #2 
+		movgt r3, r4
+		moveq r2, r4
+		movlt r1, r4
+		pop {r4, r5, r10}
+		mov r7, #0	
 			
 guardar_estado:
-			str r1, [r12], #4
-			str r2, [r12], #4
-			str r3, [r12], #8
-		    mov pc, lr
+		str r1, [r12], #4
+		str r2, [r12], #4
+		str r3, [r12], #8
+	    mov pc, lr
