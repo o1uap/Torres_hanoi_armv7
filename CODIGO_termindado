@@ -1,11 +1,11 @@
 .global _start
 _start:
 		
-		mov r0, #7
+		mov r0, #7  // se guarda el numero de discos en R0
 		bl hanoi
 		1:b 1b               
 
-hanoi:
+hanoi:                      //funcion que soluciona el problema, guarda los registros necesarios y establece valores iniciales y llama a la funcion 'torre inicial'
     push {r1-r3, r7, r9-r12, lr}
 	mov r1, #0
 	mov r2, #0
@@ -21,7 +21,7 @@ hanoi:
 	 POP {r1-r3, r7, r9-r12, lr}
 	 mov pc, lr
 	   
-torreinicial:
+torreinicial:                     //Se encarga de establecer el estado inicial de cada torre 
 		push {r0,r7,lr}
 		ldr r1, =0x12345678
 		mov r7, #4
@@ -32,7 +32,7 @@ torreinicial:
 		pop {r0, r7}
 		bl guardar_estado
 		pop {lr}
-if:
+if:                             //funcion que se encarga de ir comparando r0 con 1 si es igual salta funcion then
 		cmp r0, #1
 		beq then
 	
@@ -58,7 +58,7 @@ if:
 		pop {r0, r9-r11, lr}
 		mov pc, lr
 		
-then:
+then:                                      //Parte del bucle recursivo if, se ejecuta si el valor de r0 es 1 
 	
 	    push {lr}
 		cmp r9, #2	
@@ -66,7 +66,7 @@ then:
 		pop {lr}
 		mov pc, lr
 		
-ordenar:
+ordenar:                          //Se encarga de ordenar los discos 
  
         push {r4, r5, r10}
 		movgt r4, r3
@@ -75,13 +75,13 @@ ordenar:
 		ldr r5, =0xffffffff
 		mov r10, #0
 		push {r4}
-loop:
+loop:                            //sub funcion de ordenar que sirve para contar el numero discos de la torre mas pequeña
 	    ands r4, r5
     	lslne r5, #4
 	    addne r10, #1
 	    bne loop
 
-exit_loop:
+exit_loop:                    //saca el ultimo valor de r4 y lo compara con r7 para determinar si se debe llamar a la función 'cololcar_disco' o 'ordenar'
         pop {r4}
 	    cmp r7, #1
 	    beq colocar_disco
@@ -101,7 +101,7 @@ exit_loop:
 	    cmp r11, #2
 	    b ordenar
 	
-colocar_disco:
+colocar_disco:                     //sirve para colocar un disco en la torre correspondiente 
         lsl r10, #2 
         lsl r5, r0, r10
 	    orr r4, r5
@@ -112,7 +112,7 @@ colocar_disco:
 		pop {r4, r5, r10}
 		mov r7, #0	
 			
-guardar_estado:
+guardar_estado:                  //guarda el estado actual de cada torre en cada paso 
 		str r1, [r12], #4
 		str r2, [r12], #4
 		str r3, [r12], #8
