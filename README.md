@@ -4,4 +4,11 @@ Codigo en ASSEMBLY para ARM que resuelve las torres de hanoi con 7 discos o 8 si
 Trabajo para la asignatura ESTRUCTURA DE COMPUTADORES
 
 
+Principalmente hecho por @npc5612 junto al apoyo de @o1uap y @jxvikc  
+
+  Camilo Escudero
+  Paulo Cáceres
+  Javiera Cáceres
+
+
 UwU
