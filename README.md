@@ -1,14 +1,14 @@
 # Torres_hanoi
 
-Codigo en ASSEMBLY para ARM que resuelve las torres de hanoi con 7 discos o 8 si es que se cambia el primer registro R0 #7, por R0 #8
-Trabajo para la asignatura ESTRUCTURA DE COMPUTADORES
+Assembly code for ARM that solves the Hanoi towers with 7 disks or 8 
+if the first register R0 #7 is changed to R0 #8. 
+This is for the COMPUTER STRUCTURE course. 
+It is recommended to test on the online compiler https://cpulator.01xz.net/?sys=arm
 
+Mainly done by @npc5612 with the support of @o1uap and @jxvikc
 
-Principalmente hecho por @npc5612 junto al apoyo de @o1uap y @jxvikc  
-
-  Camilo Escudero
-  Paulo Cáceres
-  Javiera Cáceres
-
+Camilo Escudero
+Paulo Cáceres
+Javiera Cáceres
 
 UwU
